@@ -1,6 +1,6 @@
 {
   "name": "@auteon/eslint-plugin-puppeteer",
-  "version": "0.0.0",
+  "version": "0.0.0-development",
   "description": "Checks against common pitfalls when using puppeteer",
   "keywords": [
     "eslint",
@@ -16,11 +16,37 @@
     "requireindex": "~1.1.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "11.0.0",
+    "@commitlint/config-conventional": "11.0.0",
     "eslint": "^7.1.0",
-    "mocha": "^7.2.0"
+    "husky": "^5.0.9",
+    "mocha": "^7.2.0",
+    "pinst": "^2.1.4",
+    "prettier": "^2.2.1",
+    "semantic-release": "^17.3.9"
   },
   "engines": {
     "node": ">=0.10.0"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  },
+  "release": {
+    "branch": "main",
+    "branches": [
+      "main"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E  HUSKY_GIT_PARAMS"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  }
 }
