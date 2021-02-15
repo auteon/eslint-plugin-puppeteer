@@ -129,5 +129,20 @@ ruleTester.run('no-external-eval', rule, {
         },
       ],
     },
+    {
+      code: `
+        const outside = require('module')
+
+        page.$eval('.selector', function() {
+            outside
+        })
+            `,
+      errors: [
+        {
+          message:
+            'Cannot import "outside" from "module" is not in the scope of the $eval method.',
+        },
+      ],
+    },
   ],
 })
