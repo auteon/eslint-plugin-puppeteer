@@ -97,6 +97,25 @@ ruleTester.run('no-external-eval', rule, {
     },
     {
       code: `
+        export default async (page) => {
+            const outside = 'test'
+
+            await page.$eval('.selector', function() {
+                if(outside) {
+                  return
+                }
+            })
+        }
+            `,
+      errors: [
+        {
+          message:
+            'The variable "outside" is defined outside the scope of the $eval method.',
+        },
+      ],
+    },
+    {
+      code: `
         function test () {
             function outside() {}
 
