@@ -10,7 +10,11 @@
   "author": "auteon GmbH",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha tests --recursive"
+    "test": "mocha tests --recursive",
+    "prepublishOnly": "pinst --disable",
+    "postinstall": "husky install",
+    "postpublish": "pinst --enable",
+    "release": "semantic-release"
   },
   "dependencies": {
     "requireindex": "~1.1.0"
