@@ -16,6 +16,7 @@
     "postpublish": "pinst --enable",
     "release": "semantic-release"
   },
+  "repository": "git@github.com:auteon/eslint-plugin-puppeteer.git",
   "dependencies": {
     "requireindex": "~1.2.0"
   },
