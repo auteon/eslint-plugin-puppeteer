@@ -14,7 +14,9 @@ const { RuleTester } = require('eslint')
 // Tests
 //------------------------------------------------------------------------------
 
-const ruleTester = new RuleTester({ parserOptions: { ecmaVersion: 2015 } })
+const ruleTester = new RuleTester({
+  parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+})
 ruleTester.run('no-external-eval', rule, {
   valid: [
     {
@@ -109,6 +111,21 @@ ruleTester.run('no-external-eval', rule, {
         {
           message:
             'The function "outside" is defined outside the scope of the $eval method.',
+        },
+      ],
+    },
+    {
+      code: `
+        import outside from 'module'
+
+        page.$eval('.selector', function() {
+            outside
+        })
+            `,
+      errors: [
+        {
+          message:
+            'Cannot import "outside" from "module" is not in the scope of the $eval method.',
         },
       ],
     },
