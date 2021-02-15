@@ -36,9 +36,7 @@ ruleTester.run('no-external-eval', rule, {
               const outside = 'test'
 
               page.$eval('.button', (_, outside) => {
-                  if(button instanceof HTMLButtonElement) {
-                      return
-                  }
+                 outside
               }, outside)
           }
               `,
