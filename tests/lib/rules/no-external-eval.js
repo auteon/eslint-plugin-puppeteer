@@ -78,5 +78,39 @@ ruleTester.run('no-external-eval', rule, {
         },
       ],
     },
+    {
+      code: `
+        function test () {
+            function outside() {}
+
+            page.$eval('.selector', function() {
+                outside
+            })
+        }
+            `,
+      errors: [
+        {
+          message:
+            'The function "outside" is defined outside the scope of the $eval method.',
+        },
+      ],
+    },
+    {
+      code: `
+        function test () {
+            const outside = () => {}
+
+            page.$eval('.selector', function() {
+                outside
+            })
+        }
+            `,
+      errors: [
+        {
+          message:
+            'The function "outside" is defined outside the scope of the $eval method.',
+        },
+      ],
+    },
   ],
 })
