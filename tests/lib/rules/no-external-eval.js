@@ -15,7 +15,7 @@ const { RuleTester } = require('eslint')
 //------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({
-  parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+  parserOptions: { ecmaVersion: 2018, sourceType: 'module' },
 })
 ruleTester.run('no-external-eval', rule, {
   valid: [
@@ -67,6 +67,23 @@ ruleTester.run('no-external-eval', rule, {
             const outside = 'test'
 
             page.$eval('.selector', function() {
+                outside
+            })
+        }
+            `,
+      errors: [
+        {
+          message:
+            'The variable "outside" is defined outside the scope of the $eval method.',
+        },
+      ],
+    },
+    {
+      code: `
+        async function test() {
+            const outside = await Promise.resolve('test')
+
+            await page.$eval('.selector', function() {
                 outside
             })
         }
