@@ -123,7 +123,7 @@ ruleTester.run('no-external-eval', rule, {
       errors: [
         {
           message:
-            'Cannot import "outside" from "module" is not in the scope of the $eval method.',
+            'Cannot import "outside" from "module" because it is not in the scope of the $eval method.',
         },
       ],
     },
@@ -138,7 +138,7 @@ ruleTester.run('no-external-eval', rule, {
       errors: [
         {
           message:
-            'Cannot import "outside" from "module" is not in the scope of the $eval method.',
+            'Cannot import "outside" from "module" because it is not in the scope of the $eval method.',
         },
       ],
     },
