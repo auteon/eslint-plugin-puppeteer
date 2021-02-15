@@ -22,12 +22,12 @@
   "devDependencies": {
     "@commitlint/cli": "11.0.0",
     "@commitlint/config-conventional": "11.0.0",
-    "eslint": "^7.1.0",
-    "husky": "^5.0.9",
-    "mocha": "^7.2.0",
-    "pinst": "^2.1.4",
-    "prettier": "^2.2.1",
-    "semantic-release": "^17.3.9"
+    "eslint": "7.20.0",
+    "husky": "5.0.9",
+    "mocha": "7.2.0",
+    "pinst": "2.1.4",
+    "prettier": "2.2.1",
+    "semantic-release": "17.3.9"
   },
   "engines": {
     "node": ">=0.10.0"
