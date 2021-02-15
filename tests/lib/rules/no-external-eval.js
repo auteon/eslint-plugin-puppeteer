@@ -15,7 +15,7 @@ const { RuleTester } = require('eslint')
 //------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({
-  parserOptions: { ecmaVersion: 2018, sourceType: 'module' },
+  parserOptions: { ecmaVersion: 2015 },
 })
 ruleTester.run('no-external-eval', rule, {
   valid: [
@@ -88,6 +88,7 @@ ruleTester.run('no-external-eval', rule, {
             })
         }
             `,
+      parserOptions: { ecmaVersion: 2018 },
       errors: [
         {
           message:
@@ -107,6 +108,10 @@ ruleTester.run('no-external-eval', rule, {
             })
         }
             `,
+      parserOptions: {
+        ecmaVersion: 2018,
+        sourceType: 'module',
+      },
       errors: [
         {
           message:
@@ -156,6 +161,7 @@ ruleTester.run('no-external-eval', rule, {
             outside
         })
             `,
+      parserOptions: { sourceType: 'module' },
       errors: [
         {
           message:
@@ -171,6 +177,7 @@ ruleTester.run('no-external-eval', rule, {
             outside
         })
             `,
+      parserOptions: { sourceType: 'module' },
       errors: [
         {
           message:
@@ -183,13 +190,14 @@ ruleTester.run('no-external-eval', rule, {
       function test() {
         const outside = 'test'
 
-        Promise.resolve().then(() => {
-          page.$eval('.selector', () => {
+        Promise.resolve().then(async () => {
+          await page.$eval('.selector', () => {
             outside
           })
         })
       }
             `,
+      parser: require.resolve('babel-eslint'),
       errors: [
         {
           message:
