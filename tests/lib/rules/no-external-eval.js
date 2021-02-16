@@ -19,10 +19,51 @@ const rule = 'no-external-eval'
 const ruleTester = new RuleTester({
   parserOptions: { ecmaVersion: 2015 },
 })
-ruleTester.run(rule, plugin.rules[rule], {
-  valid: [
-    {
-      code: `
+
+const parsers = [
+  // default parser
+  'esprima',
+  'babel-eslint',
+  '@typescript-eslint/parser',
+]
+
+const define = ({ valid, invalid }) => ({
+  valid: enhanceTests(valid),
+  invalid: enhanceTests(invalid),
+})
+
+const enhanceTests = (tests) =>
+  parsers.reduce(
+    (result, parser) => [
+      ...result,
+      ...tests.map(({ code, errors, parserOptions, ...rest }) => ({
+        ...rest,
+        parser: require.resolve(parser),
+        parserOptions: {
+          ...parserOptions,
+
+          parser: require.resolve(parser),
+        },
+        code: `// Parser: ${parser}\n${code}`,
+        errors: errors
+          ? errors.map(({ line, ...error }) => ({
+              ...error,
+
+              line: line != null ? line + 1 : line,
+            }))
+          : undefined,
+      })),
+    ],
+    []
+  )
+
+ruleTester.run(
+  rule,
+  plugin.rules[rule],
+  define({
+    valid: [
+      {
+        code: `
           function test () { 
               page.$eval('.button', (button) => {
                   if(button instanceof HTMLButtonElement) {
@@ -31,9 +72,9 @@ ruleTester.run(rule, plugin.rules[rule], {
               })
           }
               `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
           function test () { 
               const outside = 'test'
 
@@ -42,12 +83,12 @@ ruleTester.run(rule, plugin.rules[rule], {
               }, outside)
           }
               `,
-    },
-  ],
+      },
+    ],
 
-  invalid: [
-    {
-      code: `
+    invalid: [
+      {
+        code: `
         function test () {
             const outside = 'test'
 
@@ -56,17 +97,17 @@ ruleTester.run(rule, plugin.rules[rule], {
             })
         }
             `,
-      errors: [
-        {
-          message:
-            'The variable "outside" is defined outside the scope of the $eval method.',
-          type: 'Identifier',
-          line: 6,
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            message:
+              'The variable "outside" is defined outside the scope of the $eval method.',
+            type: 'Identifier',
+            line: 6,
+          },
+        ],
+      },
+      {
+        code: `
         function test () {
             const outside = 'test'
 
@@ -75,17 +116,17 @@ ruleTester.run(rule, plugin.rules[rule], {
             })
         }
             `,
-      errors: [
-        {
-          message:
-            'The variable "outside" is defined outside the scope of the $eval method.',
-          type: 'Identifier',
-          line: 6,
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            message:
+              'The variable "outside" is defined outside the scope of the $eval method.',
+            type: 'Identifier',
+            line: 6,
+          },
+        ],
+      },
+      {
+        code: `
         async function test() {
             const outside = await Promise.resolve('test')
 
@@ -94,18 +135,18 @@ ruleTester.run(rule, plugin.rules[rule], {
             })
         }
             `,
-      parserOptions: { ecmaVersion: 2018 },
-      errors: [
-        {
-          message:
-            'The variable "outside" is defined outside the scope of the $eval method.',
-          type: 'Identifier',
-          line: 6,
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions: { ecmaVersion: 2018 },
+        errors: [
+          {
+            message:
+              'The variable "outside" is defined outside the scope of the $eval method.',
+            type: 'Identifier',
+            line: 6,
+          },
+        ],
+      },
+      {
+        code: `
         export default async (page) => {
             const outside = 'test'
 
@@ -116,21 +157,21 @@ ruleTester.run(rule, plugin.rules[rule], {
             })
         }
             `,
-      parserOptions: {
-        ecmaVersion: 2018,
-        sourceType: 'module',
-      },
-      errors: [
-        {
-          message:
-            'The variable "outside" is defined outside the scope of the $eval method.',
-          type: 'Identifier',
-          line: 6,
+        parserOptions: {
+          ecmaVersion: 2018,
+          sourceType: 'module',
         },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            message:
+              'The variable "outside" is defined outside the scope of the $eval method.',
+            type: 'Identifier',
+            line: 6,
+          },
+        ],
+      },
+      {
+        code: `
         function test () {
             function outside() {}
 
@@ -139,17 +180,17 @@ ruleTester.run(rule, plugin.rules[rule], {
             })
         }
             `,
-      errors: [
-        {
-          message:
-            'The function "outside" is defined outside the scope of the $eval method.',
-          type: 'Identifier',
-          line: 6,
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            message:
+              'The function "outside" is defined outside the scope of the $eval method.',
+            type: 'Identifier',
+            line: 6,
+          },
+        ],
+      },
+      {
+        code: `
         function test () {
             const outside = () => {}
 
@@ -158,53 +199,53 @@ ruleTester.run(rule, plugin.rules[rule], {
             })
         }
             `,
-      errors: [
-        {
-          message:
-            'The function "outside" is defined outside the scope of the $eval method.',
-          type: 'Identifier',
-          line: 6,
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            message:
+              'The function "outside" is defined outside the scope of the $eval method.',
+            type: 'Identifier',
+            line: 6,
+          },
+        ],
+      },
+      {
+        code: `
         import outside from 'module'
 
         page.$eval('.selector', function() {
             outside
         })
             `,
-      parserOptions: { sourceType: 'module' },
-      errors: [
-        {
-          message:
-            'Cannot import "outside" from "module" because it is not in the scope of the $eval method.',
-          type: 'Identifier',
-          line: 5,
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions: { sourceType: 'module' },
+        errors: [
+          {
+            message:
+              'Cannot import "outside" from "module" because it is not in the scope of the $eval method.',
+            type: 'Identifier',
+            line: 5,
+          },
+        ],
+      },
+      {
+        code: `
         const outside = require('module')
 
         page.$eval('.selector', function() {
             outside
         })
             `,
-      parserOptions: { sourceType: 'module' },
-      errors: [
-        {
-          message:
-            'Cannot import "outside" from "module" because it is not in the scope of the $eval method.',
-          type: 'Identifier',
-          line: 5,
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions: { sourceType: 'module' },
+        errors: [
+          {
+            message:
+              'Cannot import "outside" from "module" because it is not in the scope of the $eval method.',
+            type: 'Identifier',
+            line: 5,
+          },
+        ],
+      },
+      {
+        code: `
       function test() {
         const outside = 'test'
 
@@ -215,18 +256,17 @@ ruleTester.run(rule, plugin.rules[rule], {
         })
       }
             `,
-      parser: require.resolve('babel-eslint'),
-      errors: [
-        {
-          message:
-            'The variable "outside" is defined outside the scope of the $eval method.',
-          type: 'Identifier',
-          line: 7,
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            message:
+              'The variable "outside" is defined outside the scope of the $eval method.',
+            type: 'Identifier',
+            line: 7,
+          },
+        ],
+      },
+      {
+        code: `
         const outside = 'test'
 
         page.$eval('.selector', () => {
@@ -235,23 +275,67 @@ ruleTester.run(rule, plugin.rules[rule], {
           }
         })
       `,
-      parserOptions: {
-        sourceType: 'module',
+        parserOptions: {
+          sourceType: 'module',
+        },
+        errors: [
+          {
+            message:
+              'The variable "outside" is defined outside the scope of the $eval method.',
+            type: 'Identifier',
+            line: 5,
+          },
+          {
+            message:
+              'The variable "outside" is defined outside the scope of the $eval method.',
+            type: 'Identifier',
+            line: 6,
+          },
+        ],
       },
-      errors: [
-        {
-          message:
-            'The variable "outside" is defined outside the scope of the $eval method.',
-          type: 'Identifier',
-          line: 5,
+      {
+        code: `
+        const outside = 'test'
+
+        page.$eval('.selector', () => {
+          outside
+        })
+      `,
+        parserOptions: { sourceType: 'module' },
+        errors: [
+          {
+            message:
+              'The variable "outside" is defined outside the scope of the $eval method.',
+            type: 'Identifier',
+            line: 5,
+          },
+        ],
+      },
+      {
+        code: `
+        export default async function test() {
+          const outside = 'test'
+
+          Promise.resolve().then(async () => {
+            await page.$eval('.selector', () => {
+              outside
+            })
+          })
+        }
+        `,
+        parserOptions: {
+          sourceType: 'module',
+          ecmaVersion: 2018,
         },
-        {
-          message:
-            'The variable "outside" is defined outside the scope of the $eval method.',
-          type: 'Identifier',
-          line: 6,
-        },
-      ],
-    },
-  ],
-})
+        errors: [
+          {
+            message:
+              'The variable "outside" is defined outside the scope of the $eval method.',
+            type: 'Identifier',
+            line: 7,
+          },
+        ],
+      },
+    ],
+  })
+)
