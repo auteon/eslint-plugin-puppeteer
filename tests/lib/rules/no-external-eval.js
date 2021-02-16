@@ -220,7 +220,7 @@ ruleTester.run(
         errors: [
           {
             message:
-              'Cannot import "outside" from "module" because it is not in the scope of the $eval method.',
+              'Cannot use the import "outside" from "module" because it is not in the scope of the $eval method.',
             type: 'Identifier',
             line: 5,
           },
@@ -238,7 +238,7 @@ ruleTester.run(
         errors: [
           {
             message:
-              'Cannot import "outside" from "module" because it is not in the scope of the $eval method.',
+              'Cannot use the import "outside" from "module" because it is not in the scope of the $eval method.',
             type: 'Identifier',
             line: 5,
           },
