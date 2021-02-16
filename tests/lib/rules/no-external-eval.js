@@ -207,5 +207,31 @@ ruleTester.run(rule, plugin.rules[rule], {
         },
       ],
     },
+    {
+      code: `
+        const outside = 'test'
+
+        page.$eval('.selector', () => {
+          if(outside) {
+            outside
+          }
+        })
+      `,
+      parserOptions: {
+        sourceType: 'module',
+      },
+      errors: [
+        {
+          message:
+            'The variable "outside" is defined outside the scope of the $eval method.',
+          type: 'Identifier',
+        },
+        {
+          message:
+            'The variable "outside" is defined outside the scope of the $eval method.',
+          type: 'Identifier',
+        },
+      ],
+    },
   ],
 })
