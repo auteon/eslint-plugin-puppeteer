@@ -336,6 +336,25 @@ ruleTester.run(
           },
         ],
       },
+      {
+        code: `
+          if(condition) {
+            const outside = 'test'
+        
+            page.$eval('.selector', () => {
+              outside
+            })  
+          }
+        `,
+        errors: [
+          {
+            message:
+              'The variable "outside" is defined outside the scope of the $eval method.',
+            type: 'Identifier',
+            line: 6,
+          },
+        ],
+      },
     ],
   })
 )
