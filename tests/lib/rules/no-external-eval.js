@@ -7,8 +7,10 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-const rule = require('../../../lib/rules/no-external-eval')
+const plugin = require('../../../lib')
 const { RuleTester } = require('eslint')
+
+const rule = 'no-external-eval'
 
 //------------------------------------------------------------------------------
 // Tests
@@ -17,7 +19,7 @@ const { RuleTester } = require('eslint')
 const ruleTester = new RuleTester({
   parserOptions: { ecmaVersion: 2015 },
 })
-ruleTester.run('no-external-eval', rule, {
+ruleTester.run(rule, plugin.rules[rule], {
   valid: [
     {
       code: `
