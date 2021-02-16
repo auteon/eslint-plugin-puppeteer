@@ -61,6 +61,7 @@ ruleTester.run(rule, plugin.rules[rule], {
           message:
             'The variable "outside" is defined outside the scope of the $eval method.',
           type: 'Identifier',
+          line: 6,
         },
       ],
     },
@@ -79,6 +80,7 @@ ruleTester.run(rule, plugin.rules[rule], {
           message:
             'The variable "outside" is defined outside the scope of the $eval method.',
           type: 'Identifier',
+          line: 6,
         },
       ],
     },
@@ -98,6 +100,7 @@ ruleTester.run(rule, plugin.rules[rule], {
           message:
             'The variable "outside" is defined outside the scope of the $eval method.',
           type: 'Identifier',
+          line: 6,
         },
       ],
     },
@@ -122,6 +125,7 @@ ruleTester.run(rule, plugin.rules[rule], {
           message:
             'The variable "outside" is defined outside the scope of the $eval method.',
           type: 'Identifier',
+          line: 6,
         },
       ],
     },
@@ -140,6 +144,7 @@ ruleTester.run(rule, plugin.rules[rule], {
           message:
             'The function "outside" is defined outside the scope of the $eval method.',
           type: 'Identifier',
+          line: 6,
         },
       ],
     },
@@ -158,6 +163,7 @@ ruleTester.run(rule, plugin.rules[rule], {
           message:
             'The function "outside" is defined outside the scope of the $eval method.',
           type: 'Identifier',
+          line: 6,
         },
       ],
     },
@@ -175,6 +181,7 @@ ruleTester.run(rule, plugin.rules[rule], {
           message:
             'Cannot import "outside" from "module" because it is not in the scope of the $eval method.',
           type: 'Identifier',
+          line: 5,
         },
       ],
     },
@@ -192,6 +199,7 @@ ruleTester.run(rule, plugin.rules[rule], {
           message:
             'Cannot import "outside" from "module" because it is not in the scope of the $eval method.',
           type: 'Identifier',
+          line: 5,
         },
       ],
     },
@@ -213,6 +221,7 @@ ruleTester.run(rule, plugin.rules[rule], {
           message:
             'The variable "outside" is defined outside the scope of the $eval method.',
           type: 'Identifier',
+          line: 7,
         },
       ],
     },
@@ -234,11 +243,13 @@ ruleTester.run(rule, plugin.rules[rule], {
           message:
             'The variable "outside" is defined outside the scope of the $eval method.',
           type: 'Identifier',
+          line: 5,
         },
         {
           message:
             'The variable "outside" is defined outside the scope of the $eval method.',
           type: 'Identifier',
+          line: 6,
         },
       ],
     },
