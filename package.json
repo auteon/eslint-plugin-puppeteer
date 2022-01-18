@@ -30,7 +30,7 @@
     "mocha": "9.1.4",
     "pinst": "2.1.6",
     "prettier": "2.5.1",
-    "semantic-release": "18.0.1",
+    "semantic-release": "19.0.2",
     "typescript": "4.5.4"
   },
   "engines": {
